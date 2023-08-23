@@ -17,17 +17,11 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->get('limit') ? (int) $request->get('limit') : 10;
-        $offset = $request->get('offset') ? (int) $request->get('offset') : 0;
-
-        $posts = Employee::with('author');
-        $postCount = $posts->count();
-        $posts = $posts->offset($offset)->limit($limit)->get();
-
+        $employees = Employee::all();
         return response()->json([
             'success' => 'true',
-            'message' => 'Data retrieved successfully',
-            'data' => $posts,
+            'message' => 'Employees retrieved successfully',
+            'data' => $employees,
         ]);
     }
 
@@ -58,7 +52,7 @@ class EmployeeController extends Controller
 
         return response()->json([
             'success' => 'true',
-            'message' => 'Data saved successfully',
+            'message' => 'Employee created successfully',
         ]);
     }
 
@@ -67,12 +61,12 @@ class EmployeeController extends Controller
      */
     public function show(string $id)
     {
-        $jobpost = Employee::where("id",$id)->get();
+        $employee = Employee::where(["id" => $id])->get();
 
         return response()->json([
-            'success' => 'true',
-            'message' => 'Data retrieved successfully',
-            'data' => $jobpost,
+            'success' => true,
+            'message' => 'Employee retrieved successfully',
+            'data' => $employee,
         ]);
     }
 
@@ -96,12 +90,12 @@ class EmployeeController extends Controller
             ], 400);
         }
 
-        $form_data = $request->only('name', 'address', 'phone', 'company', 'position', 'salary');
+        $form_data = $request->all();
         $result = Employee::where(["id" => $id])->update($form_data);
 
         return response()->json([
             'success' => $result ? true : false,
-            'message' => $result ? 'Data updated successfully' : 'Data update failure !!',
+            'message' => $result ? 'Employee updated successfully' : 'Employee update failure !!',
         ]);
     }
 
@@ -114,7 +108,7 @@ class EmployeeController extends Controller
 
         return response()->json([
             'success' => $result ? true : false,
-            'message' => $result ? 'Data deleted successfully' : "Data deleted failure !!",
+            'message' => $result ? 'Employee deleted successfully' : "Employee deleted failure !!",
         ]);
     }
 }

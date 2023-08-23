@@ -18,14 +18,14 @@ use App\Http\Controllers\API\EmployeeController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
 
-Route::get('/employees',[EmployeeController::class, 'index']);
-Route::post('/employee/create',[EmployeeController::class, 'store']);
-Route::get('/employee/{id}',[EmployeeController::class, 'show']);
-Route::put('/employee/{id}',[EmployeeController::class, 'update']);
-Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
+Route::middleware('auth:api')->group(function () {
 
+    Route::get('/employees',[EmployeeController::class, 'index']);
+    Route::post('/employee/create',[EmployeeController::class, 'store']);
+    Route::get('/employee/{id}',[EmployeeController::class, 'show']);
+    Route::put('/employee/{id}',[EmployeeController::class, 'update']);
+    Route::delete('/employee/{id}',[EmployeeController::class, 'destroy']);
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
 });
